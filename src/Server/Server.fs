@@ -2,8 +2,6 @@ module CounterWs.Server
 
 open Fable.Core
 open Fable.Import
-open Elmish
-open Fable.Import.Browser
 open Fable.Helpers.Ws
 open Fable.Core.JsInterop
 open Fable.Import.Node
@@ -14,7 +12,7 @@ open Fable.Import.express
 // Helper types for running an express server
 
 type HttpServer =
-    inherit http_types.Server
+    inherit Http.Server
     abstract on: string * obj -> unit
 
 type HttpServerFactory =
@@ -24,11 +22,7 @@ type HttpServerFactory =
 let serv = importDefault<HttpServerFactory>("http").createServer()
 let app = express.Invoke()
 
-let path = __dirname + "/../../"
-
-console.log(sprintf "Server content from %s" path)
-
-app.``use``(express.``static``.Invoke(path)) |> ignore
+app.``use``(express.``static``.Invoke(".")) |> ignore
 
 // Create Websocket server
 let opts = [ ServerOptions.Server <| unbox serv ]
